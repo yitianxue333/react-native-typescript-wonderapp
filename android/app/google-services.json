@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "487922911515",
+    "firebase_url": "https://wonder-210220.firebaseio.com",
+    "project_id": "wonder-210220",
+    "storage_bucket": "wonder-210220.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487922911515:android:44d2aaa1c1d9693f",
+        "android_client_info": {
+          "package_name": "com.thewonderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487922911515-ibamvir9lslua4bjgj8bktbi01e48qvb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAncgTulQ-DHCrLkQoP6UykbFkYKpyywa0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

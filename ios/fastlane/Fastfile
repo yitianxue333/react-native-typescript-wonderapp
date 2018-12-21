@@ -1,0 +1,75 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  before_all do
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
+  end
+
+  desc "Push a new beta build to HockeyApp"
+  lane :beta do |options|
+    hockey_app_id = "79b60579a16f4412af6d9f0a1bbbe3e2"
+
+    # get_certificates
+    # sigh(adhoc: true, cert_id: 'Beta')
+
+    increment_build_number(xcodeproj: "WonderApp.xcodeproj")
+    build_app(workspace: "WonderApp.xcworkspace", scheme: "WonderApp")
+
+    hockey(
+      api_token: "fdd4cf6da60c4122ac8351d834f5ba3c",
+      notes: options[:notes]
+    )
+    notify_slack(
+      notes: options[:notes]
+    )
+  end
+
+  desc "Increment build number"
+  lane :vbump do |options|
+    increment_version_number(xcodeproj: "WonderApp.xcodeproj")
+  end
+
+  desc "Installs CoacoaPods dependencies"
+  lane :install_cocoapods do
+    cocoapods(repo_update: true)
+  end
+
+  lane :notify_slack do |options|
+    slack(
+      pretext: "iOS Beta Build",
+      message: options[:notes],
+      channel: "#dev-ops",  # Optional, by default will post to the default channel configured for the POST URL.
+      success: true,        # Optional, defaults to true.
+      payload: {  # Optional, lets you specify any number of your own Slack attachments.
+        "Build Date" => Time.new.to_s,
+        "Built by" => "Nick",
+      },
+      default_payloads: [], # Optional, lets you specify a whitelist of default payloads to include. Pass an empty array to suppress all the default payloads.
+      #       # Don't add this key, or pass nil, if you want all the default payloads. The available default payloads are: `lane`, `test_result`, `git_branch`, `git_author`, `last_git_commit_message`, `last_git_commit_hash`.
+      # attachment_properties: { # Optional, lets you specify any other properties available for attachments in the slack API (see https://api.slack.com/docs/attachments).
+      #      # This hash is deep merged with the existing properties set using the other properties above. This allows your own fields properties to be appended to the existing fields that were created using the `payload` property for instance.
+      #   thumb_url: "http://example.com/path/to/thumb.png",
+      #   fields: [{
+      #     title: "My Field",
+      #     value: "My Value",
+      #     short: true
+      #   }]
+      # }
+    )
+  end
+end
